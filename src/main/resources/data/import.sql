@@ -1,0 +1,58 @@
+INSERT INTO dish_types(id, type) VALUES ('1', 'Ланчі');
+INSERT INTO dish_types(id, type) VALUES ('2', 'Супи');
+INSERT INTO dish_types(id, type) VALUES ('3', 'Канапки');
+INSERT INTO dish_types(id, type) VALUES ('4', 'Піцка');
+INSERT INTO dish_types(id, type) VALUES ('5', 'Салати');
+INSERT INTO dish_types(id, type) VALUES ('6', 'Десерти');
+INSERT INTO dish_types(id, type) VALUES ('7', 'Напої');
+
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('1', 'Котлета з яловичини, рукола,  сир Ементаль, салат Коул Слоу, соус барбекю та авторський.', '', 'Хайповий Джо', '130', '310 г', '3', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('2', 'Котлета з  яловичини, багато сиру Ементаль, Трюфельна паста, грибне соте, сирний соус, свіжий огірок.', '', 'Грибний фантазер', '180', '360 г', '3', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('3', 'Яловичина, подвійний чедер, цибуля синя маринована, салат айсберг, солені огірки, амер. гірчиця, соус BBQ та фірмовий.', '', 'Той самий чіз', '140', '300 г', '3', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('4', 'Котлета з яловичини, багато хрусткого бекону та сиру Моцарела, свіжі томати, соус з огірками, маринована цибуля.', '', 'Дикий, дикий фарш', '170', '390 г', '3', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('5', 'Подвійна котлета, багато сиру Дор Блю, сир Моцарела, сир Ементаль, в''ялені томати, яблучне чатні, сирний соус з пармезаном.', '', 'Сирний амнямнямчик', '200', '410 г', '3', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('6', 'Велика яловича котлета фарширована Моцарелою, багато бекону, потрійний сир Чеддер, маринована цибуля,соус авторський.', '', 'Фаршинатор', '190', '420 г', '3', 'true');
+
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('8', 'Листя салату "Айсберг", куряча грудинка, сир Пармезан, маслинова олія.', 'Salad1.png', 'Цезар', '120', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('9', 'Томати, сир моцарела і соус "Песто".', 'Salad2.png', 'Капрезе', '150', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('10', 'Помідори, огірки, перець болгарський, маслини, лук, салат, сир Фета, олія оливкова майонезна заправка.', 'Salad3.png', 'Грецький', '85 ', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('11', 'Філе куряче, чорнослив, шампіньйони, лук, яйця, горіхи, огірки, зелень, майонез.', 'Salad4.png', 'Чорна курка', '90', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('12', 'Філе оселедця, картопля, буряк, морква, лук, майонез.', 'Salad5.png', 'Оселедець під шубою', '75', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('13', 'Язик телячий, помідор, огірок, перець, сир, майонез.', 'Salad1.png', 'Пікантний', '105', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('14', 'Куряча грудинка, солоний огірок, свіжі шампіньйони, майонез.', 'Salad2.png', 'Віндзорський', '85', '200 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('15', 'Куряча грудка маринована та приправлена 24 години, щодня свіжа на грилі.', 'Salad3.png', 'Салат з курячим філе', '120', '300 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('16', 'Нарізані кальмари в клярі, приправлені та обсмажені у фритюрі.', 'Salad4.png', 'Салат зі смаженими кальмарами', '200', '300 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('17', 'Філе лосося приправляють і маринують 24 години, а потім готують щодня свіжим на грилі.', 'Salad5.png', 'Салат з лососем на грилі', '200', '300 г', '5', 'true');
+INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('18', 'Шашлик із маринованими креветками щодня готується на грилі.', 'Salad1.png', 'Салат з креветками на грилі', '250', '300 г', '5', 'true');
+
+INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('1', 'м.Харків вул.Академіка Вальтера 14', 'vitalik@gmail.com', 'Віталій', 'Бондаренко', '1', '0995678499');
+INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('2', 'м.Харків вул.Академіка Вальтера 15', 'kolomiets23@gmail.com', 'Наталія', 'Коломіець', '1', '0667894567');
+INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('3', 'м.Харків вул.Академіка Вальтера 16', '', 'Владислав', 'Цвіркун', '1', '0678900099');
+INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('4', 'м.Харків вул.Академіка Вальтера 17', '12122@gmail.com', 'Ольга', 'Рибак', '1', '0667894564');
+INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('5', 'м.Харків вул.Академіка Вальтера 18', 'dvdw425@gmail.com', 'Василь', 'Стус', '1', '0998761122');
+
+INSERT INTO room_types(id, type) VALUES ('1', 'Економ');
+INSERT INTO room_types(id, type) VALUES ('2', 'Стандарт');
+INSERT INTO room_types(id, type) VALUES ('3', 'Люкс');
+INSERT INTO room_types(id, type) VALUES ('4', 'Напів-люкс');
+INSERT INTO room_types(id, type) VALUES ('5', 'Президентський');
+
+INSERT INTO rooms(id, capacity, presentation_name, price_per_night, room_number, room_type_id) VALUES ('1', '2', 'Чудовий номер стандарт для закоханих', '1200', '101', '2');
+INSERT INTO rooms(id, capacity, presentation_name, price_per_night, room_number, room_type_id) VALUES ('2', '3', 'Чудовий номер стандарт для трьох', '1800', '102', '2');
+INSERT INTO rooms(id, capacity, presentation_name, price_per_night, room_number, room_type_id) VALUES ('3', '1', 'Чудовий номер люкс для одного', '1100', '103', '3');
+INSERT INTO rooms(id, capacity, presentation_name, price_per_night, room_number, room_type_id) VALUES ('4', '2', 'Чудовий номер люкс для двох', '1700', '104', '3');
+INSERT INTO rooms(id, capacity, presentation_name, price_per_night, room_number, room_type_id) VALUES ('5', '3', 'Чудовий номер стандарт для двух дорослих і дитини', '2100', '105', '3');
+
+INSERT INTO reservation(id, reservation_cancelled, reservation_code, reservation_from,reservation_to, guest_id, room_id) VALUES ('1', 'false', '123456', '2022-06-02 00:00:00.000000', '2022-07-05 00:00:00.000000', 1, 1);
+INSERT INTO reservation(id, reservation_cancelled, reservation_code, reservation_from, reservation_to, guest_id, room_id) VALUES ('2', 'false', '111222', '2022-05-05 00:00:00.000000', '2022-06-02 00:00:00.000000', 2, 2);
+INSERT INTO reservation(id, reservation_cancelled, reservation_code, reservation_from, reservation_to, guest_id, room_id) VALUES ('3', 'false', '111333', '2022-01-01 00:00:00.000000', '2022-01-08 00:00:00.000000', 3, 3);
+INSERT INTO reservation(id, reservation_cancelled, reservation_code, reservation_from, reservation_to, guest_id, room_id) VALUES ('4', 'false', '111444', '2022-06-05 00:00:00.000000', '2022-08-05 00:00:00.000000', 4, 4);
+
+INSERT INTO orders(id, cancelled, confirmed, contact_number, done, expected_at, ordered_at, urgent, reservation_id) VALUES ('1', 'false', 'true', '0995678499', 'true', '2022-06-02 18:00:00.000000', '2022-06-02 13:00:00.000000', 'false', '1');
+INSERT INTO orders(id, cancelled, confirmed, contact_number, done, expected_at, ordered_at, urgent, reservation_id) VALUES ('2', 'false', 'true', '0995678499', 'true', '2022-06-02 20:00:00.000000', '2022-06-02 19:00:00.000000', 'false', '1');
+
+insert into dish_order(id, dish_count, dish_id, order_id) VALUES ('1', '1', '1', '1');
+insert into dish_order(id, dish_count, dish_id, order_id) VALUES ('2', '1', '2', '1');
+insert into dish_order(id, dish_count, dish_id, order_id) VALUES ('3', '2', '3', '2');
+insert into dish_order(id, dish_count, dish_id, order_id) VALUES ('4', '1', '4', '2');
+insert into dish_order(id, dish_count, dish_id, order_id) VALUES ('5', '2', '5', '2');
