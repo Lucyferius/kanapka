@@ -24,7 +24,7 @@ public class Dish {
     private String imagePath;
 
     @Column(name = "weight", nullable = false)
-    private String weight;
+    private float weight;
 
     @Column(name = "price", nullable = false)
     private float price;

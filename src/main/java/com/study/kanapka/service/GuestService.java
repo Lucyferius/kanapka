@@ -1,7 +1,6 @@
 package com.study.kanapka.service;
 
 import com.study.kanapka.dto.GuestDTO;
-import com.study.kanapka.model.Guest;
 import com.study.kanapka.model.Reservation;
 import com.study.kanapka.repository.GuestRepository;
 import com.study.kanapka.repository.ReservationRepository;
