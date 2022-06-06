@@ -15,8 +15,6 @@ public interface DishRepository extends PagingAndSortingRepository<Dish, Long> {
 
     List<Dish> findAllByIdIsIn(List<Long> ids);
 
-    Dish findDistinctById(Long id);
-
     @Query("SELECT d FROM Dish d  WHERE LOWER(d.name) LIKE %:name% AND d.dishType=:dishType AND d.active=true")
     Page<Dish> searchAllByDishTypeAndNameLike(@Param("dishType") DishType dishType,
                                               @Param("name") String name, Pageable pageable);

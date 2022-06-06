@@ -1,5 +1,6 @@
 package com.study.kanapka.service;
 
+import com.study.kanapka.exception.KanapkaResourceNotFoundException;
 import com.study.kanapka.model.Dish;
 import com.study.kanapka.model.DishType;
 import com.study.kanapka.repository.DishRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class DishService {
@@ -35,7 +37,11 @@ public class DishService {
     }
 
     public Dish getDishById(Long id){
-        return dishRepository.findDistinctById(id);
+        Optional<Dish> dish = dishRepository.findById(id);
+        if(dish.isEmpty()) {
+            throw new KanapkaResourceNotFoundException("There are no dish by id " + id);
+        }
+        return dish.get();
     }
 
     public Page<Dish> getAllDishesLikeSortedByPrice(String name, String direction, Pageable pageable){
@@ -56,7 +62,7 @@ public class DishService {
 
         if(dishType == null){
             logger.error("There no such dish type by name {}", type);
-            throw new IllegalArgumentException("No such dish type by name " + type);
+            throw new KanapkaResourceNotFoundException("No such dish type by name " + type);
         }
 
         if(order != null){

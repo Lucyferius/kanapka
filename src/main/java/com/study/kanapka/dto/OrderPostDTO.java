@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OrderDTO {
+public class OrderPostDTO {
     private Long guestId;
     private String phone;
     private Date expectedDate;

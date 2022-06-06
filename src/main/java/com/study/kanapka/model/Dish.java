@@ -24,10 +24,10 @@ public class Dish {
     private String imagePath;
 
     @Column(name = "weight", nullable = false)
-    private float weight;
+    private double weight;
 
     @Column(name = "price", nullable = false)
-    private float price;
+    private double price;
 
     @Column(name = "active", nullable = false)
     private boolean active;

@@ -9,7 +9,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -43,4 +42,19 @@ public class Order {
 
     @Column(name = "done", nullable = false)
     private boolean done;
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", reservation=" + reservation.getId() +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", urgent=" + urgent +
+                ", orderedAt=" + orderedAt +
+                ", expectedAt=" + expectedAt +
+                ", confirmed=" + confirmed +
+                ", cancelled=" + cancelled +
+                ", done=" + done +
+                '}';
+    }
 }

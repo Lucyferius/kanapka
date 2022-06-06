@@ -39,7 +39,8 @@ public class Guest {
     private String phone;
 
     @OneToMany(mappedBy = "guest",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private Set<Reservation> reservations;
 
     @Override

@@ -1,7 +1,7 @@
 package com.study.kanapka.controller;
 
 import com.study.kanapka.dto.GuestDTO;
-import com.study.kanapka.dto.OrderDTO;
+import com.study.kanapka.dto.OrderPostDTO;
 import com.study.kanapka.service.GuestService;
 import com.study.kanapka.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,8 @@ public class GuestController {
     }
 
     @PostMapping("/order")
-    public HttpStatus createOrder(@RequestBody OrderDTO orderDTO){
-        orderService.persistOrder(orderDTO);
+    public HttpStatus createOrder(@RequestBody OrderPostDTO orderPostDTO){
+        orderService.persistOrder(orderPostDTO);
         return HttpStatus.CREATED;
     }
 }

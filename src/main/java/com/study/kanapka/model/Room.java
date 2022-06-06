@@ -28,13 +28,14 @@ public class Room {
     private RoomType roomType;
 
     @Column(name = "price_per_night", nullable = false)
-    private float pricePerNight;
+    private double pricePerNight;
 
     @Column(name = "presentation_name", nullable = false)
     private String presentationName;
 
     @OneToMany(mappedBy = "room",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private Set<Reservation> reservations;
 
     @Override
