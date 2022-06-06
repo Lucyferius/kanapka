@@ -14,8 +14,9 @@ import java.util.Set;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_room", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_room", sequenceName = "sec_room",allocationSize=1)
+    private Long id;
 
     @Column(name = "room_number", nullable = false)
     private String roomNumber;

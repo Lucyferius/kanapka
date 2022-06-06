@@ -15,8 +15,9 @@ import java.util.Set;
 public class Guest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_guest", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_guest", sequenceName = "sec_guest",allocationSize=1)
+    private Long id;
 
     @Column(name = "first_name", length = 60, nullable = false)
     private String firstName;

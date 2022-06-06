@@ -107,7 +107,7 @@ public class OrderService {
         Order order = createOrder(orderPostDTO);
         Order saved = orderRepository.save(order);
         List<DishOrder> dishOrders = createDishOrders(orderPostDTO, saved);
-        dishOrders.forEach(dishOrderRepository::save);
+        dishOrderRepository.saveAll(dishOrders);
     }
 
     private List<DishOrder> createDishOrders(OrderPostDTO orderPostDTO, Order order) {
@@ -115,6 +115,7 @@ public class OrderService {
         List<DishOrder> dishOrders = new ArrayList<>();
         for (Dish dish: dishes){
             DishOrder dishOrder = new DishOrder();
+            dishOrder.setId(null);
             dishOrder.setDish(dish);
             dishOrder.setOrder(order);
             dishOrder.setDishCount(orderPostDTO.getDishes().get(dish.getId()));
@@ -134,6 +135,7 @@ public class OrderService {
         }else {
             order.setExpectedAt(orderPostDTO.getExpectedDate());
         }
+        order.setId(null);
         order.setConfirmed(true);
         order.setCancelled(false);
         order.setDone(false);

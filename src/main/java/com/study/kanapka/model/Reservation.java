@@ -15,8 +15,9 @@ import java.util.List;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_reservation", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_reservation", sequenceName = "sec_reservation",allocationSize=1)
+    private Long id;
 
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "guest_id")

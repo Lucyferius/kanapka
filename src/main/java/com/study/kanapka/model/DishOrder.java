@@ -8,14 +8,14 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "dish_order")
 public class DishOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_dish_order", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_dish_order", sequenceName = "sec_dish_order",allocationSize=1, initialValue = 10)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

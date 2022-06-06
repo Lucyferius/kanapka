@@ -14,8 +14,9 @@ import javax.persistence.*;
 public class Dish {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_dish", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_dish", sequenceName = "sec_dish", allocationSize=1)
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 60)
     private String name;

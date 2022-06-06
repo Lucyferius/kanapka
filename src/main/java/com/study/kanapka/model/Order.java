@@ -1,6 +1,7 @@
 package com.study.kanapka.model;
 
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,8 +15,9 @@ import java.util.*;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(generator = "sec_order", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "sec_order", sequenceName = "sec_order", allocationSize=1, initialValue = 10)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
