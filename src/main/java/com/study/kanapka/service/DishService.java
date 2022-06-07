@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -58,9 +59,9 @@ public class DishService {
         String normalized = name.toLowerCase(locale);
         Pageable sorted = pageable;
         if(order != null){
-            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
+            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price", "id");
         }
-        Page<Dish> dishes = dishRepository.searchAllByNameLike(normalized, sorted);
+        Page<Dish> dishes = dishRepository.searchAllByNameLike(normalized,  sorted);
         List<DishDTO> contents = dishes
                 .stream().map(this::mapDishToDTO).collect(Collectors.toList());
         return new PageImpl<>(contents, sorted, dishes.getTotalElements());
@@ -77,7 +78,7 @@ public class DishService {
         }
         Pageable sorted = pageable;
         if(order != null){
-            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
+            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price", "id");
         }
         Page<Dish> dishes = dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, sorted);
         List<DishDTO> contents = dishes
