@@ -17,10 +17,7 @@ import com.study.kanapka.specification.GenericSpecificationsBuilder;
 import com.study.kanapka.specification.OrderSpecification;
 import com.study.kanapka.utils.CodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -82,8 +79,9 @@ public class OrderService {
             List<Sort.Order> sorting = createSortOrder(filterDTO.getSortBy(), filterDTO.getSortOrder());
             sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(sorting));
         }
-        List<OrderGetDTO> orders =  orderRepository.findAll(builder.build(), sorted).stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
-        return new PageImpl<>(orders, sorted, orderRepository.count());
+        Page<Order> page = orderRepository.findAll(builder.build(), sorted);
+        List<OrderGetDTO> orders = page.stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
+        return new PageImpl<>(orders, sorted, page.getTotalElements());
 
     }
 

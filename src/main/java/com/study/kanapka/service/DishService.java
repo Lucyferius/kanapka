@@ -60,9 +60,10 @@ public class DishService {
         if(order != null){
             sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
         }
-        List<DishDTO> contents = dishRepository.searchAllByNameLike(normalized, sorted)
+        Page<Dish> dishes = dishRepository.searchAllByNameLike(normalized, sorted);
+        List<DishDTO> contents = dishes
                 .stream().map(this::mapDishToDTO).collect(Collectors.toList());
-        return new PageImpl<>(contents, sorted, dishRepository.count());
+        return new PageImpl<>(contents, sorted, dishes.getTotalElements());
     }
 
     public Page<DishDTO> getAllTypedDishesLikeSortedByPrice(String type, String name, String direction, Pageable pageable){
@@ -78,9 +79,10 @@ public class DishService {
         if(order != null){
             sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
         }
-        List<DishDTO> contents = dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, sorted)
+        Page<Dish> dishes = dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, sorted);
+        List<DishDTO> contents = dishes
                 .stream().map(this::mapDishToDTO).collect(Collectors.toList());
-        return new PageImpl<>(contents, sorted, dishRepository.count());
+        return new PageImpl<>(contents, sorted, dishes.getTotalElements());
     }
 
     private Sort.Direction getSortDirection(String direction) {
