@@ -1,6 +1,6 @@
 package com.study.kanapka.controller;
 
-import com.study.kanapka.model.Dish;
+import com.study.kanapka.dto.DishDTO;
 import com.study.kanapka.service.DishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ public class DishController {
      *
      * */
     @GetMapping("/dishes")
-    Page<Dish> dishesByType(@RequestParam("name") String name, @RequestParam("sort") String sort,  @PageableDefault(value = 6) Pageable pageable){
+    Page<DishDTO> dishesByType(@RequestParam("name") String name, @RequestParam("sort") String sort, @PageableDefault(value = 6) Pageable pageable){
         return dishService.getAllDishesLikeSortedByPrice(name, sort, pageable);
     }
 
@@ -41,17 +41,17 @@ public class DishController {
      *
      * */
     @GetMapping("/dishes/{type}")
-    Page<Dish> dishesByType(@PathVariable("type") String type, @RequestParam("name") String name, @RequestParam("sort") String sort, @PageableDefault(value = 6) Pageable pageable){
+    Page<DishDTO> dishesByType(@PathVariable("type") String type, @RequestParam("name") String name, @RequestParam("sort") String sort, @PageableDefault(value = 6) Pageable pageable){
         return dishService.getAllTypedDishesLikeSortedByPrice(type, name, sort, pageable);
     }
 
     @GetMapping("/dishes/internal")
-    List<Dish> dishesByIds(@RequestBody List<Long> ids){
+    List<DishDTO> dishesByIds(@RequestBody List<Long> ids){
         return dishService.getDishesByIds(ids);
     }
 
     @GetMapping("/dishes/internal/{id}")
-    Dish dishById(@PathVariable("id") Long id){
+    DishDTO dishById(@PathVariable("id") Long id){
         return dishService.getDishById(id);
     }
 

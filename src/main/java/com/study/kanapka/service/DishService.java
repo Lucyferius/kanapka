@@ -1,5 +1,6 @@
 package com.study.kanapka.service;
 
+import com.study.kanapka.dto.DishDTO;
 import com.study.kanapka.exception.KanapkaResourceNotFoundException;
 import com.study.kanapka.model.Dish;
 import com.study.kanapka.model.DishType;
@@ -7,18 +8,24 @@ import com.study.kanapka.repository.DishRepository;
 import com.study.kanapka.repository.DishTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@PropertySource("classpath:webconfig.properties")
 public class DishService {
+
+    private static final String KANAPKA_IMAGE_URL_TEMPLATE = "http://%s/image/%s";
+
+    @Value("${kanapka.baseUrl}")
+    private String baseUrl;
 
     private final static Logger logger = LoggerFactory.getLogger(DishService.class);
     private final Locale locale;
@@ -32,30 +39,33 @@ public class DishService {
         locale = new Locale("ukr", "UKR");
     }
 
-    public List<Dish> getDishesByIds(List<Long> ids){
-        return dishRepository.findAllByIdIsIn(ids);
+    public List<DishDTO> getDishesByIds(List<Long> ids){
+        return dishRepository.findAllByIdIsIn(ids)
+                .stream().map(this::mapDishToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Dish getDishById(Long id){
+    public DishDTO getDishById(Long id){
         Optional<Dish> dish = dishRepository.findById(id);
         if(dish.isEmpty()) {
             throw new KanapkaResourceNotFoundException("There are no dish by id " + id);
         }
-        return dish.get();
+        return mapDishToDTO(dish.get());
     }
 
-    public Page<Dish> getAllDishesLikeSortedByPrice(String name, String direction, Pageable pageable){
+    public Page<DishDTO> getAllDishesLikeSortedByPrice(String name, String direction, Pageable pageable){
         Sort.Direction order = getSortDirection(direction);
         String normalized = name.toLowerCase(locale);
+        Pageable sorted = pageable;
         if(order != null){
-            Pageable sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
-            return dishRepository.searchAllByNameLike(normalized, sorted);
-        }else {
-            return dishRepository.searchAllByNameLike(normalized, pageable);
+            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
         }
+        List<DishDTO> contents = dishRepository.searchAllByNameLike(normalized, sorted)
+                .stream().map(this::mapDishToDTO).collect(Collectors.toList());
+        return new PageImpl<>(contents, sorted, dishRepository.count());
     }
 
-    public Page<Dish> getAllTypedDishesLikeSortedByPrice(String type, String name, String direction, Pageable pageable){
+    public Page<DishDTO> getAllTypedDishesLikeSortedByPrice(String type, String name, String direction, Pageable pageable){
         Sort.Direction order = getSortDirection(direction);
         String normalized = name.toLowerCase(locale);
         DishType dishType = dishTypeRepository.findDistinctByDishType(type);
@@ -64,13 +74,13 @@ public class DishService {
             logger.error("There no such dish type by name {}", type);
             throw new KanapkaResourceNotFoundException("No such dish type by name " + type);
         }
-
+        Pageable sorted = pageable;
         if(order != null){
-            Pageable sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
-            return dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, sorted);
-        }else {
-            return dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, pageable);
+            sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), order, "price");
         }
+        List<DishDTO> contents = dishRepository.searchAllByDishTypeAndNameLike(dishType, normalized, sorted)
+                .stream().map(this::mapDishToDTO).collect(Collectors.toList());
+        return new PageImpl<>(contents, sorted, dishRepository.count());
     }
 
     private Sort.Direction getSortDirection(String direction) {
@@ -80,5 +90,12 @@ public class DishService {
             return Sort.Direction.DESC;
         }
         return null;
+    }
+
+    private DishDTO mapDishToDTO(Dish dish){
+        String imagePath = String.format(KANAPKA_IMAGE_URL_TEMPLATE, baseUrl, dish.getImagePath());
+        return new DishDTO(dish.getId(), dish.getName(), imagePath, dish.getWeight(),
+                dish.getPrice(), dish.isActive(), dish.getDishType().getId(),
+                dish.getDishType().getDishType(), dish.getDescription());
     }
 }
