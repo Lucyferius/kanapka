@@ -16,8 +16,11 @@ public class Order {
 
     @Id
     @GeneratedValue(generator = "sec_order", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "sec_order", sequenceName = "sec_order", allocationSize=1, initialValue = 10)
+    @SequenceGenerator(name = "sec_order", sequenceName = "sec_order", allocationSize=1, initialValue = 20)
     private Long id;
+
+    @Column(name = "code", nullable = false)
+    private String code;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
@@ -44,6 +47,9 @@ public class Order {
 
     @Column(name = "done", nullable = false)
     private boolean done;
+
+    @Column(name =  "bill")
+    private double bill;
 
     @Override
     public String toString() {

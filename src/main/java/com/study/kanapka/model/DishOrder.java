@@ -14,7 +14,7 @@ public class DishOrder {
 
     @Id
     @GeneratedValue(generator = "sec_dish_order", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "sec_dish_order", sequenceName = "sec_dish_order",allocationSize=1, initialValue = 10)
+    @SequenceGenerator(name = "sec_dish_order", sequenceName = "sec_dish_order",allocationSize=1, initialValue = 20)
     private Long id;
 
     @ManyToOne

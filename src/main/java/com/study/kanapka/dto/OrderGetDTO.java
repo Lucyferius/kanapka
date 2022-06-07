@@ -14,7 +14,8 @@ import java.util.Date;
 public class OrderGetDTO {
 
     private long id;
-    private long reservationId;
+    private String code;
+    private String reservationCode;
     private String contactNumber;
     private boolean urgent;
     private Date orderedAt;
@@ -28,7 +29,8 @@ public class OrderGetDTO {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", reservation=" + reservationId +
+                ", code=" + code +
+                ", reservation=" + reservationCode +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", urgent=" + urgent +
                 ", orderedAt=" + orderedAt +

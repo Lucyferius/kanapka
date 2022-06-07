@@ -15,6 +15,7 @@ import com.study.kanapka.repository.OrderRepository;
 import com.study.kanapka.repository.ReservationRepository;
 import com.study.kanapka.specification.GenericSpecificationsBuilder;
 import com.study.kanapka.specification.OrderSpecification;
+import com.study.kanapka.utils.CodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -81,7 +82,7 @@ public class OrderService {
             List<Sort.Order> sorting = createSortOrder(filterDTO.getSortBy(), filterDTO.getSortOrder());
             sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(sorting));
         }
-        List<OrderGetDTO> orders =  orderRepository.findAll(builder.build(), pageable).stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
+        List<OrderGetDTO> orders =  orderRepository.findAll(builder.build(), sorted).stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
         return new PageImpl<>(orders, sorted, orderRepository.count());
 
     }
@@ -104,14 +105,14 @@ public class OrderService {
     }
 
     public void persistOrder(OrderPostDTO orderPostDTO){
-        Order order = createOrder(orderPostDTO);
+        List<Dish> dishes = dishRepository.findAllByIdIsIn(new ArrayList<>(orderPostDTO.getDishes().keySet()));
+        Order order = createOrder(orderPostDTO, dishes);
         Order saved = orderRepository.save(order);
-        List<DishOrder> dishOrders = createDishOrders(orderPostDTO, saved);
+        List<DishOrder> dishOrders = createDishOrders(orderPostDTO, saved, dishes);
         dishOrderRepository.saveAll(dishOrders);
     }
 
-    private List<DishOrder> createDishOrders(OrderPostDTO orderPostDTO, Order order) {
-        List<Dish> dishes = dishRepository.findAllByIdIsIn(new ArrayList<>(orderPostDTO.getDishes().keySet()));
+    private List<DishOrder> createDishOrders(OrderPostDTO orderPostDTO, Order order, List<Dish> dishes) {
         List<DishOrder> dishOrders = new ArrayList<>();
         for (Dish dish: dishes){
             DishOrder dishOrder = new DishOrder();
@@ -124,9 +125,12 @@ public class OrderService {
         return dishOrders;
     }
 
-    private Order createOrder(OrderPostDTO orderPostDTO){
+    private Order createOrder(OrderPostDTO orderPostDTO, List<Dish> dishes){
         Order order = new Order();
+
+        order.setCode(getVerifiedCode());
         Calendar calendar = Calendar.getInstance();
+
         order.setOrderedAt(calendar.getTime());
         if(orderPostDTO.getExpectedDate() == null){
             calendar.add(Calendar.HOUR, 1);
@@ -144,15 +148,25 @@ public class OrderService {
         Reservation reservation = reservationRepository.findReservationByGuestId(orderPostDTO.getGuestId());
         order.setReservation(reservation);
 
+        double bill = dishes.stream().mapToDouble(dish -> (dish.getPrice() * orderPostDTO.getDishes().get(dish.getId()))).sum();
+        order.setBill(bill);
+
         return order;
     }
 
+    private String getVerifiedCode(){
+        while (true) {
+            String code = CodeUtils.getRandomNumberString();
+            Order order = orderRepository.findOrderByCode(code);
+            if(order == null){
+                return code;
+            }
+        }
+    }
     private OrderGetDTO mapOrderToGetDto(Order order){
-        List<Dish> dishesByOrder = getAllDishesByOrder(order.getId());
-        double count = dishesByOrder.stream().mapToDouble(Dish::getPrice).sum();
-        return new OrderGetDTO(order.getId(), order.getReservation().getId(),
+        return new OrderGetDTO(order.getId(), order.getCode(), order.getReservation().getReservationCode(),
                 order.getContactNumber(), order.isUrgent(), order.getOrderedAt(), order.getExpectedAt(),
-                order.isConfirmed(), order.isCancelled(), order.isDone(), count);
+                order.isConfirmed(), order.isCancelled(), order.isDone(), order.getBill());
     }
 
     private List<Sort.Order> createSortOrder(List<String> sortList, List<String> sortDirection) {
@@ -169,4 +183,5 @@ public class OrderService {
         }
         return sorts;
     }
+
 }
