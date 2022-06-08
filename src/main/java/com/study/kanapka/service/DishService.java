@@ -1,6 +1,7 @@
 package com.study.kanapka.service;
 
 import com.study.kanapka.dto.DishDTO;
+import com.study.kanapka.dto.IdsDto;
 import com.study.kanapka.exception.KanapkaResourceNotFoundException;
 import com.study.kanapka.model.Dish;
 import com.study.kanapka.model.DishType;
@@ -40,8 +41,8 @@ public class DishService {
         locale = new Locale("ukr", "UKR");
     }
 
-    public List<DishDTO> getDishesByIds(List<Long> ids){
-        return dishRepository.findAllByIdIsIn(ids)
+    public List<DishDTO> getDishesByIds(IdsDto ids){
+        return dishRepository.findAllByIdIsIn(ids.getIds())
                 .stream().map(this::mapDishToDTO)
                 .collect(Collectors.toList());
     }

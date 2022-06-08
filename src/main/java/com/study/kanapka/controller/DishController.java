@@ -1,6 +1,7 @@
 package com.study.kanapka.controller;
 
 import com.study.kanapka.dto.DishDTO;
+import com.study.kanapka.dto.IdsDto;
 import com.study.kanapka.service.DishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public class DishController {
     }
 
     @GetMapping("/dishes/internal")
-    List<DishDTO> dishesByIds(@RequestBody List<Long> ids){
+    List<DishDTO> dishesByIds(@RequestBody IdsDto ids){
         return dishService.getDishesByIds(ids);
     }
 
