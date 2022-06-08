@@ -14,10 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,8 +38,8 @@ public class DishService {
         locale = new Locale("ukr", "UKR");
     }
 
-    public List<DishDTO> getDishesByIds(IdsDto ids){
-        return dishRepository.findAllByIdIsIn(ids.getIds())
+    public List<DishDTO> getDishesByIds(Long[] ids){
+        return dishRepository.findAllByIdIsIn(Arrays.asList(ids))
                 .stream().map(this::mapDishToDTO)
                 .collect(Collectors.toList());
     }

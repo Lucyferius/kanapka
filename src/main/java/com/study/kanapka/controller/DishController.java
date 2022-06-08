@@ -46,14 +46,9 @@ public class DishController {
         return dishService.getAllTypedDishesLikeSortedByPrice(type, name, sort, pageable);
     }
 
-    @GetMapping("/dishes/internal")
-    List<DishDTO> dishesByIds(@RequestBody IdsDto ids){
+    @GetMapping("/dishes/internal/{ids}")
+    List<DishDTO> dishesByIds(@PathVariable Long[] ids){
         return dishService.getDishesByIds(ids);
-    }
-
-    @GetMapping("/dishes/internal/{id}")
-    DishDTO dishById(@PathVariable("id") Long id){
-        return dishService.getDishById(id);
     }
 
 }
