@@ -66,7 +66,7 @@ public class DishController {
     }
 
     @PostMapping("/dishes")
-    DishDTO createDish( @RequestParam(name = "data", required = false) String data,
+    DishDTO createDish( @RequestParam(name = "data") String data,
                         @RequestParam(name = "image", required = false) MultipartFile image){
         DishDTO dishDTO =  dishService.getDtoFromJson(data);
         if(image !=null) {
