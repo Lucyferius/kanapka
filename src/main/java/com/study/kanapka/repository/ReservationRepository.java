@@ -9,7 +9,7 @@ import java.util.Date;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    @Query("SELECT r FROM Reservation r WHERE r.reservationCode=:code AND r.from<=:now AND r.to>:now")
+    @Query("SELECT r FROM Reservation r WHERE r.reservationCode=:code AND r.from<=:now AND r.to>=:now")
     Reservation searchActiveReservationByCode(@Param("code") String code, @Param("now") Date now);
 
     Reservation findReservationByGuestId(Long id);

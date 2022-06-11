@@ -1,7 +1,10 @@
 package com.study.kanapka.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.kanapka.dto.DishDTO;
 import com.study.kanapka.dto.IdsDto;
+import com.study.kanapka.exception.KanapkaInvalidInputException;
 import com.study.kanapka.exception.KanapkaResourceNotFoundException;
 import com.study.kanapka.model.Dish;
 import com.study.kanapka.model.DishType;
@@ -101,12 +104,20 @@ public class DishService {
         if(dishDTO.getPrice()!= null && dishDTO.getPrice() > 0){
             dish.setPrice(dishDTO.getPrice());
         }
-        if(dishDTO.getWeight()!= null && dishDTO.getWeight() > 0){
+        if(dishDTO.getWeight() != null && dishDTO.getWeight() > 0){
             dish.setWeight(dishDTO.getWeight());
+        }
+        if(dishDTO.getImagePath() != null){
+            dish.setImagePath(dishDTO.getImagePath());
         }
         return mapDishToDTO(dishRepository.save(dish));
     }
 
+    public DishDTO createDish(DishDTO dishDTO){
+        Dish dish =  mapDTOtoDish(dishDTO);
+        dishRepository.save(dish);
+        return mapDishToDTO(dish);
+    }
     public void deleteDishById(long id){
         Optional<Dish> optional = dishRepository.findById(id);
         if(optional.isEmpty()){
@@ -117,6 +128,7 @@ public class DishService {
         dish.setActive(false);
         dishRepository.save(dish);
     }
+
     private Sort.Direction getSortDirection(String direction) {
         if (direction.equalsIgnoreCase("asc")) {
             return Sort.Direction.ASC;
@@ -131,5 +143,43 @@ public class DishService {
         return new DishDTO(dish.getId(), dish.getName(), imagePath, dish.getWeight(),
                 dish.getPrice(), dish.isActive(), dish.getDishType().getId(),
                 dish.getDishType().getDishType(), dish.getDescription());
+    }
+
+    private Dish mapDTOtoDish(DishDTO dishDTO){
+        DishType dishType = dishTypeRepository.findDistinctByDishType(dishDTO.getDishType());
+        if(dishType == null){
+            logger.error("There no such dish type by name {}", dishDTO.getDishType());
+            throw new KanapkaResourceNotFoundException("No such dish type by name " + dishDTO.getDishType());
+        }
+        if(dishDTO.getWeight() <= 0){
+            logger.error("Invalid weight value {}", dishDTO.getWeight());
+            throw new KanapkaResourceNotFoundException("Invalid weight value:" + dishDTO.getWeight());
+        }
+        if(dishDTO.getPrice() <= 0){
+            logger.error("Invalid price value {}", dishDTO.getPrice());
+            throw new KanapkaResourceNotFoundException("Invalid price value " + dishDTO.getPrice());
+        }
+        Dish dish = new Dish();
+        dish.setName(dishDTO.getName());
+        dish.setDescription(dishDTO.getDescription());
+        dish.setDishType(dishType);
+        dish.setImagePath(dishDTO.getImagePath());
+        dish.setWeight(dishDTO.getWeight());
+        dish.setPrice(dishDTO.getPrice());
+        dish.setActive(true);
+        return dish;
+    }
+
+    public DishDTO getDtoFromJson(String data){
+        try {
+            DishDTO dishDTO = new DishDTO();
+            if(!data.isEmpty()) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                dishDTO = objectMapper.readValue(data, DishDTO.class);
+            }
+            return dishDTO;
+        } catch (JsonProcessingException e) {
+            throw new KanapkaInvalidInputException("Invalid json input: " + data);
+        }
     }
 }

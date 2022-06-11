@@ -1,5 +1,6 @@
 package com.study.kanapka.service;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,7 @@ public class DefaultImageService {
         if (!multipartFile.isEmpty()) {
             try {
                 byte[] bytes = multipartFile.getBytes();
-                String currFileName = System.currentTimeMillis() + ".png";
+                String currFileName = System.currentTimeMillis() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(IMAGE_DIR + currFileName));
                 stream.write(bytes);
                 stream.close();

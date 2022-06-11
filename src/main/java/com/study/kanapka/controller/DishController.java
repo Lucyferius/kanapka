@@ -1,13 +1,13 @@
 package com.study.kanapka.controller;
 
 import com.study.kanapka.dto.DishDTO;
-import com.study.kanapka.dto.IdsDto;
+import com.study.kanapka.service.DefaultImageService;
 import com.study.kanapka.service.DishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,8 +15,10 @@ import java.util.List;
 public class DishController {
 
     private final DishService dishService;
+    private final DefaultImageService imageService;
 
-    public DishController(DishService dishService){
+    public DishController(DishService dishService, DefaultImageService imageService){
+        this.imageService = imageService;
         this.dishService = dishService;
     }
 
@@ -53,8 +55,25 @@ public class DishController {
     }
 
     @PatchMapping("/dishes/{id}")
-    DishDTO updateDish(@PathVariable(value = "id") Long dishId, @RequestBody DishDTO dishDTO){
+    DishDTO updateDish(@PathVariable(value = "id") Long dishId,@RequestParam(name = "data", required = false) String data,
+                       @RequestParam(name = "image", required = false) MultipartFile image){
+        DishDTO dishDTO =  dishService.getDtoFromJson(data);
+        if(image !=null) {
+            String imagePath = imageService.saveImage(image);
+            dishDTO.setImagePath(imagePath);
+        }
         return dishService.updateDishById(dishId, dishDTO);
+    }
+
+    @PostMapping("/dishes")
+    DishDTO createDish( @RequestParam(name = "data", required = false) String data,
+                        @RequestParam(name = "image", required = false) MultipartFile image){
+        DishDTO dishDTO =  dishService.getDtoFromJson(data);
+        if(image !=null) {
+            String imagePath = imageService.saveImage(image);
+            dishDTO.setImagePath(imagePath);
+        }
+        return dishService.createDish(dishDTO);
     }
 
     @DeleteMapping("/dishes/{id}")
