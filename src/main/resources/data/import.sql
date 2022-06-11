@@ -1,3 +1,6 @@
+insert into user_role(id, role) values ('1', 'ROLE_ADMIN');
+insert into user_role(id, role) values ('2', 'ROLE_USER');
+
 INSERT INTO dish_types(id, type) VALUES ('1', 'lunch');
 INSERT INTO dish_types(id, type) VALUES ('2', 'soup');
 INSERT INTO dish_types(id, type) VALUES ('3', 'snack');
@@ -56,11 +59,12 @@ INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_i
 INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('43', 'Солодка газована вода.', 'drink3.png', '7up', '30', '500', '7', 'true');
 INSERT INTO dishes(id, description, image_path, name, price, weight, dish_type_id, active) VALUES ('44', 'Фруктовий сік.', 'drink4.png', 'Сік Сандора', '60', '950', '7', 'true');
 
-INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('1', 'м.Харків вул.Академіка Вальтера 14', 'vitalik@gmail.com', 'Віталій', 'Бондаренко', '1', '0995678499');
-INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('2', 'м.Харків вул.Академіка Вальтера 15', 'kolomiets23@gmail.com', 'Наталія', 'Коломіець', '1', '0667894567');
-INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('3', 'м.Харків вул.Академіка Вальтера 16', '', 'Владислав', 'Цвіркун', '1', '0678900099');
-INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('4', 'м.Харків вул.Академіка Вальтера 17', '12122@gmail.com', 'Ольга', 'Рибак', '1', '0667894564');
-INSERT INTO guests(id, address, email, first_name, second_name, guest_role, phone) VALUES ('5', 'м.Харків вул.Академіка Вальтера 18', 'dvdw425@gmail.com', 'Василь', 'Стус', '1', '0998761122');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('1', 'м.Харків вул.Академіка Вальтера 14', 'vitalik@gmail.com', 'Віталій', 'Бондаренко', '2', '0995678499');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('2', 'м.Харків вул.Академіка Вальтера 15', 'kolomiets23@gmail.com', 'Наталія', 'Коломіець', '2', '0667894567');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('3', 'м.Харків вул.Академіка Вальтера 16', '', 'Владислав', 'Цвіркун', '2', '0678900099');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('4', 'м.Харків вул.Академіка Вальтера 17', '12122@gmail.com', 'Ольга', 'Рибак', '2', '0667894564');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('5', 'м.Харків вул.Академіка Вальтера 18', 'dvdw425@gmail.com', 'Василь', 'Стус', '2', '0998761122');
+INSERT INTO guests(id, address, email, first_name, second_name, role_id, phone) VALUES ('6', 'м.Харків вул.Академіка Вальтера 18', 'admin@gmail.com', 'admin', 'admin', '1', '0998761121');
 
 INSERT INTO room_types(id, type) VALUES ('1', 'Економ');
 INSERT INTO room_types(id, type) VALUES ('2', 'Стандарт');

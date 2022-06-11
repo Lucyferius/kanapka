@@ -11,9 +11,9 @@ public class DishDTO {
     private Long id;
     private String name;
     private String imagePath;
-    private double weight;
-    private double price;
-    private boolean active;
+    private Double weight;
+    private Double price;
+    private Boolean active;
     private Long dishTypeId;
     private String dishType;
     private String description;

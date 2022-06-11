@@ -1,11 +1,13 @@
 package com.study.kanapka.dto;
 
+import com.study.kanapka.model.Dish;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -24,6 +26,7 @@ public class OrderGetDTO {
     private boolean cancelled;
     private boolean done;
     private double bill;
+    private List<Dish> dishes;
 
     @Override
     public String toString() {

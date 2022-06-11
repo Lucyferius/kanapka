@@ -6,6 +6,7 @@ import com.study.kanapka.service.DishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,4 +52,13 @@ public class DishController {
         return dishService.getDishesByIds(ids);
     }
 
+    @PatchMapping("/dishes/{id}")
+    DishDTO updateDish(@PathVariable(value = "id") Long dishId, @RequestBody DishDTO dishDTO){
+        return dishService.updateDishById(dishId, dishDTO);
+    }
+
+    @DeleteMapping("/dishes/{id}")
+    void deleteDish(@PathVariable(value = "id") Long dishId){
+        dishService.deleteDishById(dishId);
+    }
 }

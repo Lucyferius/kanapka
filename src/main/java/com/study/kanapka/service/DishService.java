@@ -84,6 +84,39 @@ public class DishService {
         return new PageImpl<>(contents, sorted, dishes.getTotalElements());
     }
 
+    public DishDTO updateDishById(long id, DishDTO dishDTO){
+        Optional<Dish> optional = dishRepository.findById(id);
+        if(optional.isEmpty()){
+            logger.error("There no such dish by id {}", id);
+            throw new KanapkaResourceNotFoundException("No such dish by id " + id);
+        }
+        Dish dish = optional.get();
+
+        if(dishDTO.getName() != null && !dishDTO.getName().isBlank()){
+            dish.setName(dishDTO.getName());
+        }
+        if(dishDTO.getDescription() != null && !dishDTO.getDescription().isBlank()){
+            dish.setDescription(dishDTO.getDescription());
+        }
+        if(dishDTO.getPrice()!= null && dishDTO.getPrice() > 0){
+            dish.setPrice(dishDTO.getPrice());
+        }
+        if(dishDTO.getWeight()!= null && dishDTO.getWeight() > 0){
+            dish.setWeight(dishDTO.getWeight());
+        }
+        return mapDishToDTO(dishRepository.save(dish));
+    }
+
+    public void deleteDishById(long id){
+        Optional<Dish> optional = dishRepository.findById(id);
+        if(optional.isEmpty()){
+            logger.error("There no such dish by id {}", id);
+            throw new KanapkaResourceNotFoundException("No such dish by id " + id);
+        }
+        Dish dish = optional.get();
+        dish.setActive(false);
+        dishRepository.save(dish);
+    }
     private Sort.Direction getSortDirection(String direction) {
         if (direction.equalsIgnoreCase("asc")) {
             return Sort.Direction.ASC;

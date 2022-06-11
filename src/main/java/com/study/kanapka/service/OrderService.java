@@ -81,16 +81,15 @@ public class OrderService {
         }
         Page<Order> page = orderRepository.findAll(builder.build(), sorted);
         List<OrderGetDTO> orders = page.stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
+
         return new PageImpl<>(orders, sorted, page.getTotalElements());
 
     }
 
-    public OrderGetDTO getOrderById(long orderId){
-        Optional<Order> optional = orderRepository.findById(orderId);
-        if(optional.isEmpty()){
-            throw new KanapkaResourceNotFoundException("There are no order by id " + orderId);
-        }
-        return mapOrderToGetDto(optional.get());
+    public List<OrderGetDTO> getOrdersByIds(Long[] ids){
+        return orderRepository.findAllByIdIsIn(Arrays.asList(ids))
+                .stream().map(this::mapOrderToGetDto)
+                .collect(Collectors.toList());
     }
 
     public List<Dish> getAllDishesByOrder(long orderId){
@@ -162,9 +161,10 @@ public class OrderService {
         }
     }
     private OrderGetDTO mapOrderToGetDto(Order order){
+        List<Dish> dishes = getAllDishesByOrder(order.getId());
         return new OrderGetDTO(order.getId(), order.getCode(), order.getReservation().getReservationCode(),
                 order.getContactNumber(), order.isUrgent(), order.getOrderedAt(), order.getExpectedAt(),
-                order.isConfirmed(), order.isCancelled(), order.isDone(), order.getBill());
+                order.isConfirmed(), order.isCancelled(), order.isDone(), order.getBill(), dishes);
     }
 
     private List<Sort.Order> createSortOrder(List<String> sortList, List<String> sortDirection) {

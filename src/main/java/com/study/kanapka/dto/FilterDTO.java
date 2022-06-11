@@ -1,10 +1,7 @@
 package com.study.kanapka.dto;
 
 import com.study.kanapka.model.Reservation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @NamedEntityGraph
 public class FilterDTO {
 

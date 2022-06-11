@@ -32,9 +32,9 @@ public class Guest {
     @Column(name = "address", length = 60)
     private String address;
 
-    @Column(name = "guest_role", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private GuestRole role;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private UserRole role;
 
     @Column(name = "phone", nullable = false)
     private String phone;
