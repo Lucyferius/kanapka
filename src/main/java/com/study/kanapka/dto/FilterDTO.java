@@ -12,7 +12,6 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedEntityGraph
 public class FilterDTO {
 
     private Boolean urgent;

@@ -1,8 +1,6 @@
 package com.study.kanapka.service;
 
-import com.study.kanapka.dto.FilterDTO;
-import com.study.kanapka.dto.OrderGetDTO;
-import com.study.kanapka.dto.OrderPostDTO;
+import com.study.kanapka.dto.*;
 import com.study.kanapka.exception.KanapkaResourceNotFoundException;
 import com.study.kanapka.exception.KanapkaSortingException;
 import com.study.kanapka.model.Dish;
@@ -19,6 +17,7 @@ import com.study.kanapka.utils.CodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,12 +100,74 @@ public class OrderService {
         return dishOrders.stream().map(DishOrder::getDish).collect(Collectors.toList());
     }
 
+    @Transactional
     public void persistOrder(OrderPostDTO orderPostDTO){
         List<Dish> dishes = dishRepository.findAllByIdIsIn(new ArrayList<>(orderPostDTO.getDishes().keySet()));
         Order order = createOrder(orderPostDTO, dishes);
         Order saved = orderRepository.save(order);
         List<DishOrder> dishOrders = createDishOrders(orderPostDTO, saved, dishes);
         dishOrderRepository.saveAll(dishOrders);
+    }
+
+    public OrdersReservationsDTO getOrdersByReservation(String code){
+        Reservation reservation = reservationRepository.searchActiveReservationByCode(code, new Date());
+        if(reservation == null){
+            throw new KanapkaResourceNotFoundException("There are no active reservations by code: " + code);
+        }
+        List<OrderGetDTO> orderGetDTOS =  orderRepository.findOrdersByReservation(reservation)
+                .stream().map(this::mapOrderToGetDto).collect(Collectors.toList());
+        return new OrdersReservationsDTO(reservation.getGuest().getFirstName(),
+                reservation.getGuest().getSecondName(),
+                reservation.getGuest().getPhone(),
+                reservation.getRoom().getRoomNumber(),
+                reservation.getFrom(),
+                reservation.getTo(),
+                reservation.getReservationCode(),
+                reservation.isCancelled(),
+                orderGetDTOS);
+    }
+
+    public Page<OrdersReservationsDTO> getOrdersWithReservations(Pageable pageable){
+        Page<Reservation> reservations = reservationRepository.searchAllActiveReservations(new Date(), pageable);
+        List<Long> reservationIds = reservations.stream().map(Reservation::getId).collect(Collectors.toList());
+        List<Order> allOrders = orderRepository.findOrdersByReservationIdIn(reservationIds);
+        Map<Reservation, List<OrderGetDTO>> map = groupOrdersWithReservations(allOrders, reservations.getContent());
+       List<OrdersReservationsDTO> ordersReservationsDTOS =  map.entrySet().stream().map( key ->
+            new OrdersReservationsDTO(key.getKey().getGuest().getFirstName(),
+                    key.getKey().getGuest().getSecondName(),
+                    key.getKey().getGuest().getPhone(),
+                    key.getKey().getRoom().getRoomNumber(),
+                    key.getKey().getFrom(),
+                    key.getKey().getTo(),
+                    key.getKey().getReservationCode(),
+                    key.getKey().isCancelled(),
+                    key.getValue())).collect(Collectors.toList());
+
+       return new PageImpl<>(ordersReservationsDTOS, pageable, reservations.getTotalElements());
+    }
+
+    public Page<DishPopularityScaleDto> getDishesByPopularity(Pageable pageable){
+
+        return dishOrderRepository.searchSortedByPopularityPage(pageable);
+    }
+
+    public List<DishPopularityScaleDto> getDishesByPopularityFullList(){
+       return dishOrderRepository.searchSortedByPopularity();
+    }
+
+    private Map<Reservation, List<OrderGetDTO>> groupOrdersWithReservations(List<Order> orders, List<Reservation> reservations){
+        Map<Reservation, List<OrderGetDTO>> map = new HashMap<>();
+        reservations.forEach(reservation -> map.put(reservation, new ArrayList<>()));
+        for(Order order : orders){
+            if(map.get(order.getReservation()) == null){
+                List<OrderGetDTO> orderList = new ArrayList<>();
+                orderList.add(mapOrderToGetDto(order));
+                map.put(order.getReservation(), orderList);
+            }else {
+                map.get(order.getReservation()).add(mapOrderToGetDto(order));
+            }
+        }
+        return map;
     }
 
     private List<DishOrder> createDishOrders(OrderPostDTO orderPostDTO, Order order, List<Dish> dishes) {

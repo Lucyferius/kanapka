@@ -3,12 +3,14 @@ package com.study.kanapka.controller;
 import com.study.kanapka.dto.DishDTO;
 import com.study.kanapka.service.DefaultImageService;
 import com.study.kanapka.service.DishService;
+import com.study.kanapka.util.DishPopularityReportExporter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -54,7 +56,7 @@ public class DishController {
         return dishService.getDishesByIds(ids);
     }
 
-    @PatchMapping("/dishes/{id}")
+    @PatchMapping("/admin/dishes/{id}")
     DishDTO updateDish(@PathVariable(value = "id") Long dishId,@RequestParam(name = "data", required = false) String data,
                        @RequestParam(name = "image", required = false) MultipartFile image){
         DishDTO dishDTO =  dishService.getDtoFromJson(data);
@@ -65,7 +67,7 @@ public class DishController {
         return dishService.updateDishById(dishId, dishDTO);
     }
 
-    @PostMapping("/dishes")
+    @PostMapping("/admin/dishes")
     DishDTO createDish( @RequestParam(name = "data") String data,
                         @RequestParam(name = "image", required = false) MultipartFile image){
         DishDTO dishDTO =  dishService.getDtoFromJson(data);
@@ -76,8 +78,9 @@ public class DishController {
         return dishService.createDish(dishDTO);
     }
 
-    @DeleteMapping("/dishes/{id}")
+    @DeleteMapping("/admin/dishes/{id}")
     void deleteDish(@PathVariable(value = "id") Long dishId){
         dishService.deleteDishById(dishId);
     }
+
 }
