@@ -91,13 +91,12 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<Dish> getAllDishesByOrder(long orderId){
+    public List<DishPopularityScaleDto> getAllDishesByOrder(long orderId){
         Optional<Order> optional = orderRepository.findById(orderId);
         if(optional.isEmpty()){
             throw new KanapkaResourceNotFoundException("There are no order by id " + orderId);
         }
-        List<DishOrder> dishOrders = dishOrderRepository.findAllByOrder(optional.get());
-        return dishOrders.stream().map(DishOrder::getDish).collect(Collectors.toList());
+        return dishOrderRepository.findAllByOrder(optional.get());
     }
 
     @Transactional
@@ -222,7 +221,7 @@ public class OrderService {
         }
     }
     private OrderGetDTO mapOrderToGetDto(Order order){
-        List<Dish> dishes = getAllDishesByOrder(order.getId());
+        List<DishPopularityScaleDto> dishes = getAllDishesByOrder(order.getId());
         return new OrderGetDTO(order.getId(), order.getCode(), order.getReservation().getReservationCode(),
                 order.getContactNumber(), order.isUrgent(), order.getOrderedAt(), order.getExpectedAt(),
                 order.isConfirmed(), order.isCancelled(), order.isDone(), order.getBill(), dishes);

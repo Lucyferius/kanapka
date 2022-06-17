@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/admin/orders/details/{id}")
-    public List<Dish> getDishesByOrder(@PathVariable long id){
+    public List<DishPopularityScaleDto> getDishesByOrder(@PathVariable long id){
         return orderService.getAllDishesByOrder(id);
     }
 
@@ -43,7 +43,7 @@ public class OrderController {
         return orderService.getOrdersByIds(ids);
     }
 
-    @GetMapping("/admin/orders")
+    @PostMapping("/admin/orders")
     public Page<OrderGetDTO> getAllOrders( @RequestBody FilterDTO filterDTO, @PageableDefault(value = 6) Pageable pageable){
         return orderService.getAllWithFiltering(filterDTO, pageable);
     }

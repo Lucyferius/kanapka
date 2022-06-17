@@ -26,7 +26,7 @@ public class OrderGetDTO {
     private boolean cancelled;
     private boolean done;
     private double bill;
-    private List<Dish> dishes;
+    private List<DishPopularityScaleDto> dishes;
 
     @Override
     public String toString() {

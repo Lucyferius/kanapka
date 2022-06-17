@@ -15,7 +15,10 @@ import java.util.Map;
 
 public interface DishOrderRepository extends JpaRepository<DishOrder, Long> {
 
-    List<DishOrder> findAllByOrder(Order order);
+    @Query("select  new com.study.kanapka.dto.DishPopularityScaleDto(sum(d.dishCount), d.dish) " +
+            "from DishOrder d where d.order=:order " +
+            "group by d.dish")
+    List<DishPopularityScaleDto> findAllByOrder(Order order);
 
     @Query("Select new com.study.kanapka.dto.DishPopularityScaleDto(sum(d.dishCount), d.dish ) " +
             "from DishOrder d " +
